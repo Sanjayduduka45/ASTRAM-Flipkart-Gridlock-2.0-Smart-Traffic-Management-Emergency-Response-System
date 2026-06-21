@@ -202,13 +202,32 @@ Copy `.env.example` to `.env` and fill in your keys:
 cp .env.example .env
 ```
 
-### 3. Initialize Supabase Database
+### 3. Install Dependencies
+
+Before running the application, make sure to install both the Python backend and React frontend dependencies:
+
+**Backend (Python):**
+It is recommended to run inside a virtual environment:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+**Frontend (Node.js/React):**
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+### 4. Initialize Supabase Database
 Execute the SQL script in your Supabase SQL editor or run it via terminal:
 ```bash
 psql "postgresql://postgres:password@db.your-project.supabase.co:5432/postgres" -f supabase_schema.sql
 ```
 
-### 4. Install Dependencies & Run
+### 5. Run the Application
 Start both servers locally using the startup helper script:
 ```bash
 chmod +x run_astram.sh
