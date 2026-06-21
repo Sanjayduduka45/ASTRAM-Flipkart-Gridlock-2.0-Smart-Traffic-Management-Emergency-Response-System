@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="canonical" href="https://astram.bengaluru.gov.in/" />
+    
+    <title>ASTRAM Bengaluru Traffic Management Platform</title>
+    <meta name="description" content="AI-powered traffic monitoring, incident reporting, congestion prediction, and resource management platform for Bengaluru city operations." />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://astram.bengaluru.gov.in/" />
+    <meta property="og:title" content="ASTRAM Bengaluru Traffic Management Platform" />
+    <meta property="og:description" content="AI-powered traffic monitoring, incident reporting, congestion prediction, and resource management platform for Bengaluru city operations." />
+    <meta property="og:image" content="https://astram.bengaluru.gov.in/og-image.png" />
+    <meta property="og:site_name" content="ASTRAM" />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://astram.bengaluru.gov.in/" />
+    <meta name="twitter:title" content="ASTRAM Bengaluru Traffic Management Platform" />
+    <meta name="twitter:description" content="AI-powered traffic monitoring, incident reporting, congestion prediction, and resource management platform for Bengaluru city operations." />
+    <meta name="twitter:image" content="https://astram.bengaluru.gov.in/og-image.png" />
+
+    <!-- Structured Data Organization JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "GovernmentOrganization",
+      "name": "ASTRAM Bengaluru Traffic Management Platform",
+      "alternateName": "ASTRAM Smart City TMC",
+      "description": "AI-powered traffic monitoring, incident reporting, congestion prediction, and resource management platform for Bengaluru city operations.",
+      "url": "https://astram.bengaluru.gov.in/",
+      "logo": "https://astram.bengaluru.gov.in/favicon.svg",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bengaluru",
+        "addressRegion": "Karnataka",
+        "addressCountry": "IN"
+      }
+    }
+    </script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Google Fonts: Inter, Manrope, Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Manrope:wght@200..800&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+        --font-card-title: 'Manrope', 'Inter', system-ui, sans-serif;
+        --font-page-title: 'Plus Jakarta Sans', 'Manrope', 'Inter', system-ui, sans-serif;
+        --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+      }
+      body {
+        font-family: var(--font-body);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      code, pre, .font-mono {
+        font-family: var(--font-mono);
+      }
+    </style>
+  </head>
+  <body class="bg-slate-50 dark:bg-[#09090b] text-slate-900 dark:text-zinc-50 antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

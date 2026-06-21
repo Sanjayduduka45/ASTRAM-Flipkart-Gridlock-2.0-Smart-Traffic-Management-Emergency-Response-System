@@ -1,0 +1,117 @@
+# Python Caches & Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+.env
+.env.*
+!.env.example
+
+# Node / Frontend Caches & Builds
+node_modules/
+dist/
+dist-ssr/
+.eslintcache
+.parcel-cache
+
+# Database & Datasets
+Data/Astram event data_anonymized*
+
+# OS Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+.gemini/
+*.log
+# Environment
+.env
+.env.local
+
+# Dependencies
+node_modules/
+
+# Build
+dist/
+build/
+.next/
+
+# ML Models
+models/*.pkl
+models/*.joblib
+models/*.h5
+
+# Datasets
+Data/
+data/
+
+# Outputs
+output/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# dependencies
+node_modules/
+
+# build
+dist/
+build/
+.next/
+
+# python
+__pycache__/
+*.pyc
+
+# outputs
+output/
+
+# datasets
+Data/
+
+# models
+models/*.pkl
+models/*.joblib
+
+# temp
+tmp/
+
+# env
+.env
+.env.local
+
+# vscode
+.vscode/
+
+# mac
+.DS_Store
+
+# Models
+models/*.pkl
+models/**/*.pkl
+
+# Outputs
+output/
+artifacts/
+
+# Dataset
+Data/*.csv
+
+# Environment
+.env
