@@ -213,10 +213,10 @@ export const IncidentManagementPage: React.FC<IncidentManagementPageProps> = ({
       </div>
 
       {incidentSubTab === 'dispatch' && (
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 h-[calc(100vh-210px)] min-h-[580px] items-stretch text-left">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 h-auto lg:h-[calc(100vh-210px)] lg:min-h-[580px] items-stretch text-left">
           
           {/* PANEL 1: PRIORITY QUEUE */}
-          <div className="lg:col-span-1 flex flex-col bg-slate-100/50 border border-slate-200 rounded-xl p-3 h-full overflow-hidden">
+          <div className="lg:col-span-1 flex flex-col bg-slate-100/50 border border-slate-200 rounded-xl p-3 h-[380px] lg:h-full overflow-hidden">
             <div className="flex items-center justify-between mb-3 px-1">
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
@@ -345,7 +345,7 @@ export const IncidentManagementPage: React.FC<IncidentManagementPageProps> = ({
           </div>
 
           {/* PANEL 2: ACTIVE INCIDENTS */}
-          <div className="lg:col-span-2 flex flex-col bg-slate-100/50 border border-slate-200 rounded-xl p-3 h-full overflow-hidden">
+          <div className="lg:col-span-2 flex flex-col bg-slate-100/50 border border-slate-200 rounded-xl p-3 h-[380px] lg:h-full overflow-hidden">
             <div className="flex items-center justify-between mb-3 px-1">
               <div className="flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
@@ -458,7 +458,7 @@ export const IncidentManagementPage: React.FC<IncidentManagementPageProps> = ({
           </div>
 
           {/* PANEL 3 & 4: TEAMS & STATUS TRACKING (STACKED) */}
-          <div className="lg:col-span-1 flex flex-col gap-4 h-full overflow-hidden">
+          <div className="lg:col-span-1 flex flex-col gap-4 h-[450px] lg:h-full overflow-hidden">
             
             {/* RESPONSE TEAMS PANEL */}
             <div className="flex-[4_4_0%] flex flex-col bg-slate-100/50 border border-slate-200 rounded-xl p-3 overflow-hidden">

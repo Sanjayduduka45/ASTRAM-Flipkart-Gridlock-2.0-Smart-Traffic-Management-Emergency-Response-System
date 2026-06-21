@@ -25,7 +25,8 @@ import {
   Settings,
   LogOut,
   ShieldAlert,
-  Navigation
+  Navigation,
+  Menu
 } from 'lucide-react';
 
 /* ── Types ──────────────────────────────────────────────── */
@@ -257,6 +258,7 @@ export const Layout: React.FC<LayoutProps> = ({
   }, []);
 
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const role = currentUser?.role || 'admin';
 
@@ -317,7 +319,7 @@ export const Layout: React.FC<LayoutProps> = ({
   return (
     <div className="min-h-screen flex bg-slate-50 transition-colors duration-150">
       {/* ── Sidebar ────────────────────────────────────────────────── */}
-      <aside className={`bg-white  border-r border-slate-200  flex flex-col justify-between shrink-0 transition-all duration-300 ease-in-out ${isCollapsed ? 'w-[72px]' : 'w-[240px]'}`}>
+      <aside className={`hidden md:flex bg-white border-r border-slate-200 flex-col justify-between shrink-0 transition-all duration-300 ease-in-out ${isCollapsed ? 'w-[72px]' : 'w-[240px]'}`}>
         {/* Logo and Collapse Toggle */}
         <div>
           <div className={`px-4 py-4 border-b border-slate-200  flex ${isCollapsed ? 'flex-col items-center space-y-3' : 'items-center justify-between'}`}>
@@ -422,6 +424,13 @@ export const Layout: React.FC<LayoutProps> = ({
         <header className="relative z-[100] h-[56px] bg-white border-b border-slate-200 flex items-center justify-between px-5 shrink-0">
           {/* ─ Left: Tab Title + Live Count ─ */}
           <div className="flex items-center space-x-3 min-w-0">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="p-1 rounded-lg hover:bg-slate-100 text-slate-500 md:hidden shrink-0"
+              title="Open Menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
             <h2 className="text-[15px] font-bold text-slate-800 tracking-tight truncate">
               {t[activeTab] || activeTab}
             </h2>
@@ -678,6 +687,86 @@ export const Layout: React.FC<LayoutProps> = ({
           {children}
         </main>
       </div>
+
+      {/* ── Mobile Sidebar Drawer ─────────────────────────────────── */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[250] md:hidden">
+          {/* Backdrop overlay */}
+          <div 
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity duration-300"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          {/* Drawer content */}
+          <div className="fixed inset-y-0 left-0 w-[260px] max-w-[80vw] bg-white shadow-2xl flex flex-col justify-between z-10 transition-transform duration-300 transform translate-x-0">
+            <div>
+              {/* Drawer header */}
+              <div className="px-4 py-4 border-b border-slate-200 flex items-center justify-between">
+                <div className="flex items-center space-x-2.5 min-w-0">
+                  <img 
+                    src="/logo.jpg" 
+                    alt="ASTRAM Logo" 
+                    className="h-9 w-9 rounded-lg object-cover bg-white border border-slate-200 shadow-sm shrink-0"
+                  />
+                  <div className="min-w-0">
+                    <h1 className="text-[15px] font-extrabold text-slate-900 tracking-tight leading-none">ASTRAM</h1>
+                    <p className="text-[10px] text-slate-400 font-medium tracking-wide">Smart City TMC</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-1 rounded-lg hover:bg-slate-100 border border-slate-200/60 text-slate-500 transition-colors"
+                  title="Close Menu"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              {/* Navigation list */}
+              <nav className="px-3 py-3 space-y-1">
+                {menuItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  const label = t[item.id] || item.id;
+                  
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-[13px] font-semibold transition-all duration-100 border ${
+                        isActive 
+                          ? 'bg-blue-50 text-blue-600 border-blue-100/80 shadow-sm shadow-blue-500/5 font-extrabold' 
+                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 border-transparent'
+                      }`}
+                      style={{ minHeight: '44px' }}
+                    >
+                      <div className="flex items-center space-x-3 min-w-0">
+                        <Icon className={`h-5 w-5 shrink-0 ${isActive ? 'text-blue-650' : 'text-slate-400'}`} />
+                        <span className="truncate">{label}</span>
+                      </div>
+                      {isActive && <ChevronRight className="h-3.5 w-3.5 opacity-60 shrink-0" />}
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+
+            {/* Drawer footer */}
+            <div className="px-4 py-3 border-t border-slate-200">
+              <div className="flex items-center space-x-2.5 bg-slate-50/80 p-2.5 rounded-lg border border-slate-100/80">
+                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse shrink-0"></div>
+                <div className="text-left min-w-0">
+                  <p className="text-[11px] font-semibold text-slate-700 truncate">{t.systemActive}</p>
+                  <p className="text-[9px] text-slate-400 font-mono">{t.systemVersion}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

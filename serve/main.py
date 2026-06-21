@@ -55,16 +55,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-@app.get("/api/copy-logo")
-def copy_logo_endpoint():
-    src = "/Users/sanjayduduka/.gemini/antigravity-ide/brain/77a0f7c8-ea81-41ae-9469-0e04c14ad0eb/media__1782046632944.jpg"
-    dst = os.path.join(os.path.dirname(os.path.dirname(__file__)), "frontend", "public", "logo.jpg")
-    try:
-        import shutil
-        shutil.copy(src, dst)
-        return {"status": "success", "message": f"Copied logo to {dst}"}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+
 
 # CORS middleware for React Vite app (running on port 5173 by default)
 app.add_middleware(

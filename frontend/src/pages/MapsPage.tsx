@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Activity, Clock } from 'lucide-react';
+import { Clock, X, Filter } from 'lucide-react';
 import { BENGALURU_LOCATIONS } from '../mockData';
 import type { Incident, HotspotData, MapLayersState, CameraData, WeatherData } from '../types';
 
@@ -32,6 +32,7 @@ export const MapsPage: React.FC<MapsPageProps> = ({
   const [mapZoneFilter, setMapZoneFilter] = useState<string>('all');
   const [mapTypeFilter, setMapTypeFilter] = useState<string>('all');
   const [mapRiskFilter, setMapRiskFilter] = useState<string>('all');
+  const [isOverlayOpen, setIsOverlayOpen] = useState<boolean>(typeof window !== 'undefined' ? window.innerWidth > 768 : true);
 
   // Compute filtered incidents list locally
   const filteredIncidents = incidents.filter(inc => {
@@ -62,9 +63,9 @@ export const MapsPage: React.FC<MapsPageProps> = ({
     .slice(0, 5);
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-stretch h-[calc(100vh-120px)] min-h-[580px] animate-fade-in text-left">
+    <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 items-stretch h-auto lg:h-[calc(100vh-120px)] lg:min-h-[580px] animate-fade-in text-left">
       {/* Map Section (Columns 1-4, 80% width) */}
-      <div className="lg:col-span-4 relative rounded-2xl border border-slate-200 shadow-sm overflow-hidden h-full flex flex-col bg-slate-550/5">
+      <div className="lg:col-span-4 relative rounded-2xl border border-slate-200 shadow-sm overflow-hidden h-[450px] lg:h-full flex flex-col bg-slate-550/5">
         <React.Suspense fallback={<div className="flex items-center justify-center h-full w-full bg-slate-100 text-slate-450 font-bold text-xs">Loading Live Maps Viewer...</div>}>
           <MapViewer 
             incidents={filteredIncidents}
@@ -89,151 +90,172 @@ export const MapsPage: React.FC<MapsPageProps> = ({
         </React.Suspense>
         
         {/* Floating Map Panel (Top-Right) */}
-        <div className="absolute top-4 right-4 z-[1000] bg-white/90 backdrop-blur-md border border-slate-200 rounded-xl p-3.5 shadow-xl space-y-3.5 w-60 text-left">
-          <div className="border-b border-slate-100 pb-2 flex items-center justify-between">
-            <div>
-              <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest block font-mono">astram console</span>
-              <h3 className="text-xs font-extrabold text-slate-800">Operations Control</h3>
-            </div>
-            <Activity className="h-3.5 w-3.5 text-blue-600 animate-pulse" />
-          </div>
-          
-          {/* Section 1: Active Layers */}
-          <div className="space-y-2">
-            <span className="text-[8px] font-bold text-slate-405 uppercase tracking-widest block mb-1">map overlays</span>
-            <div className="space-y-1.5 text-[11px]">
-              <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
-                <input 
-                  type="checkbox" 
-                  checked={mapLayers.incidents && mapLayers.congestion}
-                  onChange={() => {
-                    const nextVal = !(mapLayers.incidents && mapLayers.congestion);
-                    setMapLayers((prev) => ({ ...prev, incidents: nextVal, congestion: nextVal }));
-                  }}
-                  className="rounded border-slate-350 text-blue-600 focus:ring-blue-500/40"
-                />
-                <span>Critical Zones</span>
-              </label>
-
-              <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
-                <input 
-                  type="checkbox" 
-                  checked={mapLayers.closures}
-                  onChange={() => setMapLayers((prev) => ({ ...prev, closures: !prev.closures }))}
-                  className="rounded border-slate-350 text-blue-600 focus:ring-blue-500/40"
-                />
-                <span>Road Closures</span>
-              </label>
-
-              <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
-                <input 
-                  type="checkbox" 
-                  checked={mapLayers.diversions}
-                  onChange={() => setMapLayers((prev) => ({ ...prev, diversions: !prev.diversions }))}
-                  className="rounded border-slate-350 text-blue-600 focus:ring-blue-500/40"
-                />
-                <span>Diversions</span>
-              </label>
-
-              <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
-                <input 
-                  type="checkbox" 
-                  checked={mapLayers.police && mapLayers.emergency && mapLayers.barricades}
-                  onChange={() => {
-                    const nextVal = !(mapLayers.police && mapLayers.emergency && mapLayers.barricades);
-                    setMapLayers((prev) => ({ 
-                      ...prev, 
-                      police: nextVal, 
-                      emergency: nextVal, 
-                      barricades: nextVal 
-                    }));
-                  }}
-                  className="rounded border-slate-350 text-blue-600 focus:ring-blue-500/40"
-                />
-                <span>Deployed Resources</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Section 2: Spatial Filters */}
-          <div className="border-t border-slate-100 pt-2.5 space-y-2">
-            <span className="text-[8px] font-bold text-slate-405 uppercase tracking-widest block">filters</span>
-            
-            <div className="space-y-2">
-              <div>
-                <label className="text-[8.5px] font-bold text-slate-400 uppercase block mb-0.5 font-mono">Zone</label>
-                <select 
-                  value={mapZoneFilter} 
-                  onChange={(e) => setMapZoneFilter(e.target.value)}
-                  className="w-full text-[10.5px] bg-slate-50 border border-slate-200 rounded-lg p-1.5 focus:ring-2 focus:ring-blue-500/40 focus:outline-none text-slate-700"
-                >
-                  <option value="all">All Zones</option>
-                  <option value="Silk Board Area">Silk Board Area</option>
-                  <option value="Hebbal Corridor">Hebbal Corridor</option>
-                  <option value="Whitefield">Whitefield</option>
-                  <option value="Majestic Center">Majestic Center</option>
-                  <option value="Koramangala">Koramangala</option>
-                  <option value="Indiranagar">Indiranagar</option>
-                  <option value="Jayanagar">Jayanagar</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-[8.5px] font-bold text-slate-400 uppercase block mb-0.5 font-mono">Cause</label>
-                <select 
-                  value={mapTypeFilter} 
-                  onChange={(e) => setMapTypeFilter(e.target.value)}
-                  className="w-full text-[10.5px] bg-slate-50 border border-slate-200 rounded-lg p-1.5 focus:ring-2 focus:ring-blue-500/40 focus:outline-none text-slate-700"
-                >
-                  <option value="all">All Causes</option>
-                  <option value="accident">Accident</option>
-                  <option value="breakdown">Breakdown</option>
-                  <option value="flooding">Flooding</option>
-                  <option value="construction">Construction</option>
-                  <option value="pothole">Pothole</option>
-                  <option value="tree fall">Tree fall</option>
-                  <option value="others">Others</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-[8.5px] font-bold text-slate-400 uppercase block mb-0.5 font-mono">Risk</label>
-                <select 
-                  value={mapRiskFilter} 
-                  onChange={(e) => setMapRiskFilter(e.target.value)}
-                  className="w-full text-[10.5px] bg-slate-50 border border-slate-200 rounded-lg p-1.5 focus:ring-2 focus:ring-blue-500/40 focus:outline-none text-slate-700"
-                >
-                  <option value="all">All Risks</option>
-                  <option value="CRITICAL">CRITICAL</option>
-                  <option value="HIGH">HIGH</option>
-                  <option value="MEDIUM">MEDIUM</option>
-                  <option value="LOW">LOW</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer Controls */}
-          <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
-            <span>Plots: {filteredIncidents.length}</span>
+        <div className={`absolute top-4 right-4 z-[1000] bg-white/90 backdrop-blur-md border border-slate-200 rounded-xl shadow-xl transition-all duration-200 text-left ${
+          isOverlayOpen ? 'p-3.5 w-60 space-y-3.5' : 'p-2 w-auto'
+        }`}>
+          {!isOverlayOpen ? (
             <button 
-              onClick={() => {
-                setMapZoneFilter('all');
-                setMapTypeFilter('all');
-                setMapRiskFilter('all');
-                setSelectedHotspot(null);
-                setSelectedIncident(null);
-              }}
-              className="text-blue-600 hover:underline font-bold"
+              onClick={() => setIsOverlayOpen(true)}
+              className="flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-blue-600 transition-colors focus:outline-none"
+              title="Expand Operations Control"
             >
-              Reset Filters
+              <Filter className="h-4 w-4 text-blue-600" />
+              <span className="text-[10px] uppercase font-bold tracking-wider">Filters</span>
             </button>
-          </div>
+          ) : (
+            <>
+              <div className="border-b border-slate-100 pb-2 flex items-center justify-between">
+                <div>
+                  <span className="text-[8px] font-bold text-slate-400 uppercase tracking-widest block font-mono">astram console</span>
+                  <h3 className="text-xs font-extrabold text-slate-800">Operations Control</h3>
+                </div>
+                <button 
+                  onClick={() => setIsOverlayOpen(false)}
+                  className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-slate-655 transition-colors"
+                  title="Collapse Controls"
+                >
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+              
+              {/* Section 1: Active Layers */}
+              <div className="space-y-2">
+                <span className="text-[8px] font-bold text-slate-405 uppercase tracking-widest block mb-1">map overlays</span>
+                <div className="space-y-1.5 text-[11px]">
+                  <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+                    <input 
+                      type="checkbox" 
+                      checked={mapLayers.incidents && mapLayers.congestion}
+                      onChange={() => {
+                        const nextVal = !(mapLayers.incidents && mapLayers.congestion);
+                        setMapLayers((prev) => ({ ...prev, incidents: nextVal, congestion: nextVal }));
+                      }}
+                      className="rounded border-slate-350 text-blue-600 focus:ring-blue-500/40"
+                    />
+                    <span>Critical Zones</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+                    <input 
+                      type="checkbox" 
+                      checked={mapLayers.closures}
+                      onChange={() => setMapLayers((prev) => ({ ...prev, closures: !prev.closures }))}
+                      className="rounded border-slate-350 text-blue-600 focus:ring-blue-500/40"
+                    />
+                    <span>Road Closures</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+                    <input 
+                      type="checkbox" 
+                      checked={mapLayers.diversions}
+                      onChange={() => setMapLayers((prev) => ({ ...prev, diversions: !prev.diversions }))}
+                      className="rounded border-slate-350 text-blue-600 focus:ring-blue-500/40"
+                    />
+                    <span>Diversions</span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer font-bold text-slate-700">
+                    <input 
+                      type="checkbox" 
+                      checked={mapLayers.police && mapLayers.emergency && mapLayers.barricades}
+                      onChange={() => {
+                        const nextVal = !(mapLayers.police && mapLayers.emergency && mapLayers.barricades);
+                        setMapLayers((prev) => ({ 
+                          ...prev, 
+                          police: nextVal, 
+                          emergency: nextVal, 
+                          barricades: nextVal 
+                        }));
+                      }}
+                      className="rounded border-slate-350 text-blue-600 focus:ring-blue-500/40"
+                    />
+                    <span>Deployed Resources</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Section 2: Spatial Filters */}
+              <div className="border-t border-slate-100 pt-2.5 space-y-2">
+                <span className="text-[8px] font-bold text-slate-405 uppercase tracking-widest block">filters</span>
+                
+                <div className="space-y-2">
+                  <div>
+                    <label className="text-[8.5px] font-bold text-slate-400 uppercase block mb-0.5 font-mono">Zone</label>
+                    <select 
+                      value={mapZoneFilter} 
+                      onChange={(e) => setMapZoneFilter(e.target.value)}
+                      className="w-full text-[10.5px] bg-slate-50 border border-slate-200 rounded-lg p-1.5 focus:ring-2 focus:ring-blue-500/40 focus:outline-none text-slate-700"
+                    >
+                      <option value="all">All Zones</option>
+                      <option value="Silk Board Area">Silk Board Area</option>
+                      <option value="Hebbal Corridor">Hebbal Corridor</option>
+                      <option value="Whitefield">Whitefield</option>
+                      <option value="Majestic Center">Majestic Center</option>
+                      <option value="Koramangala">Koramangala</option>
+                      <option value="Indiranagar">Indiranagar</option>
+                      <option value="Jayanagar">Jayanagar</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-[8.5px] font-bold text-slate-400 uppercase block mb-0.5 font-mono">Cause</label>
+                    <select 
+                      value={mapTypeFilter} 
+                      onChange={(e) => setMapTypeFilter(e.target.value)}
+                      className="w-full text-[10.5px] bg-slate-50 border border-slate-200 rounded-lg p-1.5 focus:ring-2 focus:ring-blue-500/40 focus:outline-none text-slate-700"
+                    >
+                      <option value="all">All Causes</option>
+                      <option value="accident">Accident</option>
+                      <option value="breakdown">Breakdown</option>
+                      <option value="flooding">Flooding</option>
+                      <option value="construction">Construction</option>
+                      <option value="pothole">Pothole</option>
+                      <option value="tree fall">Tree fall</option>
+                      <option value="others">Others</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="text-[8.5px] font-bold text-slate-400 uppercase block mb-0.5 font-mono">Risk</label>
+                    <select 
+                      value={mapRiskFilter} 
+                      onChange={(e) => setMapRiskFilter(e.target.value)}
+                      className="w-full text-[10.5px] bg-slate-50 border border-slate-200 rounded-lg p-1.5 focus:ring-2 focus:ring-blue-500/40 focus:outline-none text-slate-700"
+                    >
+                      <option value="all">All Risks</option>
+                      <option value="CRITICAL">CRITICAL</option>
+                      <option value="HIGH">HIGH</option>
+                      <option value="MEDIUM">MEDIUM</option>
+                      <option value="LOW">LOW</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer Controls */}
+              <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[10px] text-slate-400">
+                <span>Plots: {filteredIncidents.length}</span>
+                <button 
+                  onClick={() => {
+                    setMapZoneFilter('all');
+                    setMapTypeFilter('all');
+                    setMapRiskFilter('all');
+                    setSelectedHotspot(null);
+                    setSelectedIncident(null);
+                  }}
+                  className="text-blue-600 hover:underline font-bold"
+                >
+                  Reset Filters
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
       {/* Contextual Intelligence Panel (Column 5, 20% width) */}
-      <div className="lg:col-span-1 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between overflow-y-auto h-full text-left">
+      <div className="lg:col-span-1 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between overflow-y-auto h-auto lg:h-full text-left">
         {!selectedHotspot && !selectedIncident ? (
           /* Default View: Top 5 High-Risk Zones */
           <div className="space-y-4">

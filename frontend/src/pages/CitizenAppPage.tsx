@@ -259,7 +259,7 @@ export const CitizenAppPage: React.FC<CitizenAppPageProps> = ({
 
             {/* Embedded Mobile Device with responsive scaling/overflow support */}
             <div className="w-full overflow-hidden pb-2 flex justify-center items-center min-h-[610px] sm:min-h-[700px]">
-              <div className="scale-[0.85] xs:scale-90 sm:scale-100 origin-center transition-all duration-300">
+              <div className="scale-[0.72] min-[375px]:scale-[0.8] min-[410px]:scale-[0.88] sm:scale-100 origin-center transition-all duration-300">
                 <CitizenMobile 
                   weatherData={activeWeather}
                   onReportIncident={handleCitizenReport}
