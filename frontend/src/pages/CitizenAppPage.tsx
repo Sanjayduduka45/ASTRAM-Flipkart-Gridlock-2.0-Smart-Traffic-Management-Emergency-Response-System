@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { CitizenMobile } from '../components/CitizenMobile';
 import type { WeatherData, Incident, CitizenReportInput } from '../types';
+import { API_BASE_URL } from '../config/api';
 import type { TMCNotification } from '../components/Layout';
 
 interface ExtendedWeatherData extends WeatherData {
@@ -47,7 +48,7 @@ export const CitizenAppPage: React.FC<CitizenAppPageProps> = ({
     // Avoid synchronous state updates in the render path/effect body
     setTimeout(() => setLoadingWeather(true), 0);
     try {
-      const res = await fetch('http://localhost:8000/api/weather');
+      const res = await fetch(`${API_BASE_URL}/api/weather`);
       if (res.ok) {
         const data = await res.json();
         setLiveWeather(data);
@@ -121,7 +122,7 @@ export const CitizenAppPage: React.FC<CitizenAppPageProps> = ({
         image: reportData.image || null
       };
 
-      const res = await fetch('http://localhost:8000/api/citizen-report', {
+      const res = await fetch(`${API_BASE_URL}/api/citizen-report`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

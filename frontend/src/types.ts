@@ -122,6 +122,12 @@ export interface WeatherData {
   flood_risk: string;
   storm_alerts: string;
   visibility_km?: number;
+  humidity?: number;
+  wind_speed?: number;
+  rain_probability?: number;
+  weather_condition?: string;
+  source?: string;
+  timestamp?: string;
 }
 
 export interface HotspotData {
