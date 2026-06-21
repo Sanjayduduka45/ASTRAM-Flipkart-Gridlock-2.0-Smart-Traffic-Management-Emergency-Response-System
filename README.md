@@ -184,55 +184,38 @@ ASTRAM/
 
 ---
 
-## 💻 Installation Guide
+## 💻 Installation & Deployment Guide
 
-### Prerequisites
-* [Node.js](https://nodejs.org/) (v18 or higher)
-* [Python 3.10+](https://www.python.org/)
+### Backend Setup
 
-### 1. Clone the Repository
 ```bash
-git clone https://github.com/Sanjayduduka45/ASTRAM-Flipkart-Gridlock-2.0-Smart-Traffic-Management-Emergency-Response-System.git
-cd ASTRAM-Flipkart-Gridlock-2.0-Smart-Traffic-Management-Emergency-Response-System
-```
+# Initialize and activate virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-### 2. Configure Environment Variables
-Copy `.env.example` to `.env` and fill in your keys:
-```bash
-cp .env.example .env
-```
-
-### 3. Install Dependencies
-
-Before running the application, make sure to install both the Python backend and React frontend dependencies:
-
-**Backend (Python):**
-It is recommended to run inside a virtual environment:
-```bash
-python3 -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+# Install requirements
 pip install -r requirements.txt
+
+# Start backend server with reload
+python -m uvicorn serve.main:app --reload
 ```
 
-**Frontend (Node.js/React):**
+### Frontend Setup
+
 ```bash
+# Navigate to frontend, install dependencies, and start dev server
 cd frontend
 npm install
-cd ..
+npm run dev
 ```
 
-### 4. Initialize Supabase Database
-Execute the SQL script in your Supabase SQL editor or run it via terminal:
-```bash
-psql "postgresql://postgres:password@db.your-project.supabase.co:5432/postgres" -f supabase_schema.sql
-```
+### Railway Deployment
 
-### 5. Run the Application
-Start both servers locally using the startup helper script:
-```bash
-chmod +x run_astram.sh
-./run_astram.sh
-```
+1. **Connect GitHub repository**: Link your GitHub repository to a new Railway project.
+2. **Railway detects Procfile**: Railway will automatically detect the root-level `Procfile` and set up the start command.
+3. **Add environment variables**: Define all required variables (e.g., Supabase keys, weather API endpoints) in Railway's service variables dashboard.
+4. **Deploy**: Trigger manual or automatic deployment.
+5. **Verify API health endpoint**: Confirm status by requesting the `https://<your-railway-url>/api/health` endpoint.
 
 ---
 
@@ -247,3 +230,4 @@ chmod +x run_astram.sh
 ## 📄 License
 
 Distributed under the MIT License. See `LICENSE` for more information.
+
