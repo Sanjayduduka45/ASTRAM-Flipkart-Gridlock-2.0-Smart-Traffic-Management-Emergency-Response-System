@@ -184,6 +184,21 @@ ASTRAM/
 
 ---
 
+## 📦 Model Artifacts
+
+For repository size optimization, trained model artifacts (`.pkl`) and datasets are excluded from version control.
+
+The deployed prototype uses a fallback prediction engine when trained artifacts are unavailable.
+
+To reproduce training:
+```bash
+python run_model_training.py
+```
+
+Generated artifacts will be stored locally in `/artifacts`.
+
+---
+
 ## 💻 Installation & Deployment Guide
 
 ### Backend Setup
